@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Fudbalski_Balon
 {
@@ -109,6 +111,23 @@ namespace Fudbalski_Balon
                     dataGridView1.Rows[i].Cells[1].Style.BackColor = Color.White;
                 }
             }
+            string[] baloni = Korisnik.baloni.TrimEnd(';').Split(';');
+            string[] termini = Korisnik.termini.TrimEnd(';').Split(';');
+            string[] datumi = Korisnik.datumi.TrimEnd(';').Split(';');
+            for (int i = 0; i < baloni.Length; i++)
+            {
+                if (baloni[i] == balonID.ToString() && datumi[i] == (datum[2] + "-" + datum[0] + "-" + datum[1]))
+                {
+                    for (int j = 0; j < dataGridView1.RowCount; j++)
+                    {
+                        if (termini[i].Split(',').Contains(dataGridView1.Rows[j].Cells[0].Value))
+                        {
+                            dataGridView1.Rows[j].Cells[0].Style.BackColor = Color.Cyan;
+                            dataGridView1.Rows[j].Cells[1].Style.BackColor = Color.Cyan;
+                        }
+                    }
+                }
+            }
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -142,6 +161,82 @@ namespace Fudbalski_Balon
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             comboBox1_SelectedIndexChanged(sender,e);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            int balonID = Convert.ToInt32(Konekcija.Unos("select id from balon where naziv='" + comboBox1.Text + "'").Rows[0][0]);
+            string[] baloni = Korisnik.baloni.TrimEnd(';').Split(';');
+            string[] termini = Korisnik.termini.TrimEnd(';').Split(';');
+            string[] datumi = Korisnik.datumi.TrimEnd(';').Split(';');
+            bool check = false;
+            string[] datum = dateTimePicker1.Value.Date.ToString().Split(' ')[0].Split('/');
+            for (int i = 0; i < baloni.Length; i++)
+            {
+                if (baloni[i] == balonID.ToString() && datumi[i] == (datum[2] + "-" + datum[0] + "-" + datum[1])) check = true;
+            }
+            if (check)
+            {
+                Korisnik.baloni = "";
+                Korisnik.termini = "";
+                Korisnik.datumi = "";
+                for (int i = 0; i < baloni.Length; i++)
+                {
+                    if (!(baloni[i] == balonID.ToString() && datumi[i] == (datum[2] + "-" + datum[0] + "-" + datum[1])))
+                    {
+                        Korisnik.baloni += baloni[i] + ';';
+                        Korisnik.termini += termini[i] + ';';
+                        Korisnik.datumi += datumi[i] + ';';
+                    }
+                    else
+                    {
+                        int count = 0;
+                        for (int j = 0; j < dataGridView1.RowCount; j++)
+                        {
+                            if (dataGridView1.Rows[j].Cells[0].Style.BackColor == Color.Cyan)
+                            {
+                                count++;
+                                Korisnik.termini += dataGridView1.Rows[j].Cells[0].Value.ToString() + ',';
+                            }
+                        }
+                        if (count != 0)
+                        {
+                            Korisnik.termini = Korisnik.termini.TrimEnd(',') +';';
+                            Korisnik.baloni += balonID.ToString() + ';';
+                            Korisnik.datumi += datum[2] + "-" + datum[0] + "-" + datum[1] +';';
+                        }
+                        else
+                        {
+
+                        }                       
+                    }
+                }
+            }
+            else
+            {
+                int count = 0;
+                for (int j = 0; j < dataGridView1.RowCount; j++)
+                {
+                    if (dataGridView1.Rows[j].Cells[0].Style.BackColor == Color.Cyan)
+                    {
+                        count++;
+                        Korisnik.termini += dataGridView1.Rows[j].Cells[0].Value.ToString() + ',';
+                    }
+                }
+                if (count != 0)
+                {
+                    Korisnik.termini = Korisnik.termini.TrimEnd(',') +';';
+                    Korisnik.baloni += balonID.ToString() + ';';
+                    Korisnik.datumi += datum[2] + "-" + datum[0] + "-" + datum[1] + ';';
+                }
+                else
+                {
+
+                }
+            }
+            Korisnik.termini = Korisnik.termini.TrimEnd(';') + ';';
+            Korisnik.baloni = Korisnik.baloni.TrimEnd(';') + ';';
+            Korisnik.datumi = Korisnik.datumi.TrimEnd(';') + ';';
         }
     }
 }

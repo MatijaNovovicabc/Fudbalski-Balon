@@ -67,6 +67,12 @@
     <Compile Include="ONama.Designer.cs">
       <DependentUpon>ONama.cs</DependentUpon>
     </Compile>
+    <Compile Include="Placanje.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Placanje.Designer.cs">
+      <DependentUpon>Placanje.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pocetna.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ONama.resx">
       <DependentUpon>ONama.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Placanje.resx">
+      <DependentUpon>Placanje.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Pocetna.resx">
       <DependentUpon>Pocetna.cs</DependentUpon>

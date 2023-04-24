@@ -8,7 +8,7 @@ namespace Fudbalski_Balon
 {
     internal class Korisnik
     {
-        static public string email = "";
+        static public string email = "", baloni = "", termini = "", datumi ="";
         static public int balonID = 0;
     }
 }
