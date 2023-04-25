@@ -128,6 +128,7 @@ namespace Fudbalski_Balon
                     }
                 }
             }
+            label7.Text = "Cena termina: " + Konekcija.Unos("select cenaTermina from balon_radnoVreme where dan='"+dan+"' and balon_id="+balonID).Rows[0][0] +" RSD";
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -237,6 +238,19 @@ namespace Fudbalski_Balon
             Korisnik.termini = Korisnik.termini.TrimEnd(';') + ';';
             Korisnik.baloni = Korisnik.baloni.TrimEnd(';') + ';';
             Korisnik.datumi = Korisnik.datumi.TrimEnd(';') + ';';
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (Korisnik.baloni.TrimEnd(';')!="") {
+                Placanje frm = new Placanje();
+                frm.Show();
+                this.Visible = false;
+            }
+            else
+            {
+                errorProvider1.SetError(button6,"Niste izabrali nijedan termin!");
+            }
         }
     }
 }
